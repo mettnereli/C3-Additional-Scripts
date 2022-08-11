@@ -1,4 +1,4 @@
-#Credit to Dmitris Ntounish for the majority of this file
+#Credit to Dmitris Ntounis for the majority of this file
 
 #!/bin/bash
 
