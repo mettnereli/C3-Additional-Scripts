@@ -1,3 +1,7 @@
+#File takes in GPig data and places a cut on it to a new output file.
+# To run:    python run_cut.py [cut] [input_file] [output_file]
+# Note that the [cut] is in GeV, so 10 MeV would be [.01]
+
 import argparse
 
 parser = argparse.ArgumentParser(description='A program to place a specific cut on GPig Output pairs.dat files. format: ./run_cut.py cut file_input file_output')
@@ -18,10 +22,10 @@ nF = open(newFile, 'w')
 for line in f.readlines():
     totalLines += 1
     vars = line.split(' ')
-    if (abs(float(vars[0])) <= cut): continue;
+    if (abs(float(vars[0])) <= cut): continue; #Skips over anything under cut
     afterLines += 1
     nF.write(line)
 f.close()
 nF.close()
-
+#Prints out the original n of events and then the n of events after just to see
 print("Total Events: " + str(totalLines) + "\nAfter Cut: " + str(afterLines))
