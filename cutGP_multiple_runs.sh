@@ -1,3 +1,5 @@
+#Credit to Dmitris Ntounish for the majority of this file
+
 #!/bin/bash
 
 # Rules for seeds: 6 numbers, don't start with zero!
