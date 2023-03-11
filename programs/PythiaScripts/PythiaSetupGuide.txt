@@ -1,0 +1,20 @@
+#Steps to install pythia and run for C3 Hadron Pair Production Background
+
+#Log in to cluster or area with cvmfs
+#Download latest version of Pythia (https://www.pythia.org/)
+#scp the pythia tar into your cluster and chosen working directory
+#Once in working directory on cluster:
+source /cvmfs/sft.cern.ch/lcg/views/LCG_101/x86_64-centos7-gcc11-opt/setup.sh
+tar xvfz pythia8309.tgz #or whatever version of pythia instead of 8309
+cd pythia8309 #or other pythia version
+./configure –with-hepmc3
+gmake
+export PYTHIA8DATA=$PWD/share/Pythia8/xmldoc #Very important step!
+cd examples
+#To make sure installation and setup are correct, do:
+make main41
+./main41
+#Should not throw any errors and output a hepmc file
+
+#In line 73 of the Makefile, add “main69” to the list of examples using hepmc3
+#edit main69 to produce hepmc3 output (working on that currently)
