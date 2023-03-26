@@ -1,0 +1,33 @@
+#these instructions have been successfully run on cmslpc 
+
+#log in somewhere with cvmfs, assuming your shell is bash
+#cd into your chosen working area directory (rules should work no matter where you are)
+mkdir -p dd4hep && cd dd4hep
+source /cvmfs/sft.cern.ch/lcg/views/LCG_101/x86_64-centos7-gcc11-opt/setup.sh
+git clone https://github.com/iLCSoft/lcgeo.git
+cd lcgeo
+mkdir build install && cd build
+cmake -DCMAKE_CXX_STANDARD="17" -DCMAKE_INSTALL_PREFIX=../install ..
+make -j $(nproc) install
+cd ../..
+mkdir runArea && cd runArea
+git clone git@gist.github.com:7c70092f76d6dea573279f206691344f.git
+cd 7c70092f76d6dea573279f206691344f 
+#edit Line 3 of env.sh to say “source ../../lcgeo/install/bin/thislcgeo.sh”
+#edit Line 36 of CLICSid.py to change to own path (Note that #“dd4hep/lcgeo/SiD/compact/SiD_o2_v04/SiD_o2_v04.xml” part of the path will remain unchanged, just point it toward that file in your working directory, not lagray’s
+source env.sh
+#edit line 60 of C3_G4guineapig.py to point toward your “pairs.dat” GPIG output file
+python C3_G4guineapig.py
+#Note: to run in batch mode, “python C3_G4guineapig.py batch”
+#Within geant4 Shell “Idle> ”
+/run/beamOn 
+#will run from anywhere between 15 mins to an hour depending on the pairs.dat file size
+exit
+
+#To set up environment anytime you log back in:
+cd /your/working/directory/dd4hep
+source /cvmfs/sft.cern.ch/lcg/views/LCG_101/x86_64-centos7-gcc11-opt/setup.sh
+cd runArea 
+cd 7c70092f76d6dea573279f206691344f 
+source env.sh
+python C3_G4guineapig.py
