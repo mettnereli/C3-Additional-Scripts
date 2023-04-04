@@ -1,12 +1,13 @@
 
 
 void getIDpRvZ() {
-TH1D *h_p,*h_pT, *h_pdgID;
+TH1D *h_p,*h_pT, *h_pdgID, *h_eta;
 TH2D *h_hits_r_vs_z;
-h_p = new TH1D("h_p","h_p",50,0,50);
-h_pT = new TH1D("h_pT","h_pT",50,0,50);
-h_pdgID = new TH1D("h_pdgID","h_pdgID",100,-400,400);
-h_hits_r_vs_z = new TH2D("h_hits_r_vs_z","h_hits_r_vs_z",40,-70,70,20,0,70);
+h_p = new TH1D("h_p","h_p",100,0,250);
+h_pT = new TH1D("h_pT","h_pT",100,0,250);
+h_pdgID = new TH1D("h_pdgID","h_pdgID",25,0,25);
+h_eta = new TH1D("h_eta","h_eta",50,-4,4);
+h_hits_r_vs_z = new TH2D("h_hits_r_vs_z","h_hits_r_vs_z",50,-70,70,50,0,70);
 double x_position,y_position,z_position,r_position;
 const int nfiles=1;
 int totalSize = 0;
@@ -17,7 +18,7 @@ int N1=0,N2=0,N3=0,N4=0,N5=0;
 	
 //cout << "====================================================================== Seed:" << seed[ifile] << " ======================================================================" << endl;
 std::ostringstream oss;
-oss << "~/nobackup/dd4hep/runSim/C3SiD_HepMCTest.root" ;
+oss << "./C3Sid_10kEvents.root" ;
 std::string file_name = oss.str();
 cout << file_name << endl;
 char char_array[200];
@@ -33,6 +34,7 @@ TTreeFormula Z_position("Z_position","SiVertexBarrelHits.position.Z()",tree);
 TTreeFormula R_position("R_position","SiVertexBarrelHits.position.R()",tree);
 TTreeFormula Rho("pX","SiVertexBarrelHits.momentum.Rho()",tree);
 TTreeFormula Mag2("pY","SiVertexBarrelHits.momentum.Mag2()",tree);
+TTreeFormula Eta("eta","SiVertexBarrelHits.position.Eta()",tree);
  for(int i=0; i<nentries; i++)
  {
     //tree -> GetEntry(i);
@@ -47,6 +49,7 @@ TTreeFormula Mag2("pY","SiVertexBarrelHits.momentum.Mag2()",tree);
          R_position.GetNdata();	
          Rho.GetNdata();
          Mag2.GetNdata();
+         Eta.GetNdata();
 	 cout << " size = " << size << endl;
 	
 	 for(int j=0;j<size;j++)
@@ -58,12 +61,12 @@ TTreeFormula Mag2("pY","SiVertexBarrelHits.momentum.Mag2()",tree);
      auto pdg = pdgID.EvalInstance(j);	
      auto p = Mag2.EvalInstance(j);
      auto pT = Rho.EvalInstance(j);
-	
+     auto eta = Eta.EvalInstance(j);	
      h_hits_r_vs_z -> Fill(z,sqrt(x*x+y*y));
      h_p -> Fill(p);
      h_pT -> Fill(pT);
-     h_pdgID -> Fill(pdg);	 	
-		
+     h_pdgID -> Fill(pdg);	 	 
+     h_eta -> Fill(eta);	
 		
 	 }
 	
@@ -76,4 +79,5 @@ f.WriteObject(h_hits_r_vs_z, "r_vs_z");
 f.WriteObject(h_p, "p");
 f.WriteObject(h_pT, "pT");
 f.WriteObject(h_pdgID, "pdgID");
+f.WriteObject(h_eta, "eta");
 }
